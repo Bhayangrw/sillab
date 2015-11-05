@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Sillab">
+
+    <title>Admin::Laboratorium</title>
+	
+    <!-- Bootstrap Core CSS -->
+	<?php echo HTML::style('assets/bower_components/bootstrap/dist/css/bootstrap.min.css'); ?>
+
+    <link href="/assets/dtbootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <!--<?php echo HTML::style('assets/assets/dist/css/datepicker.css'); ?>-->
+    <!-- MetisMenu CSS -->
+	<?php echo HTML::style('assets/bower_components/metisMenu/dist/metisMenu.min.css'); ?>
+
+    <!-- Custom CSS -->
+	<?php echo HTML::style('assets/dist/css/sb-admin-2.css'); ?>
+
+    <!-- Custom Fonts -->
+	<?php echo HTML::style('assets/bower_components/font-awesome/css/font-awesome.min.css'); ?>
+
+	<!--Charts CSS -->
+	<script type="text/javascript" src="/assets/hightchart/jquery.min.js"></script>
+	<style type="text/css">
+			${demo.css}
+	</style>
+</head>
+<body>			
+
+    <div class="col-lg-12">
+    	<h3 class="page-header" align="center"><b>Riwayat Pemeriksaan Pasien Laboratorium</b><p>
+                    <?php echo e(isset(Auth::user()->name) ? Auth::user()->lab->NmLab : Auth::user()->email); ?><br>
+                    <small><?php echo e(isset(Auth::user()->name) ? Auth::user()->lab->Alamat : Auth::user()->email); ?></small></h3>
+            <!--Panel body dan table-->
+            <div class="panel-body">
+                <div class="row">
+                <div class="table-responsive">
+                    <?php if(count($datpasien)): ?>
+                    <table class="table table-nospasi">
+                        <?php foreach($pasien as $p): ?>
+                                    <tr>
+                                        <th style="border-top: none;">No.Medrek</th>
+                                        <td style="border-top: none;">:&nbsp;<?php echo $p->Id_Pasien; ?></td>
+                                        <td style="border-top: none;"><b>Status Keluarga&nbsp;</b>&nbsp;&nbsp;&nbsp;&nbsp;:
+                                            <?php echo $p->Nama_Status_Kel; ?>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th width="130px" style="border-top: none;">Nama Pasien</th>
+                                        <td style="border-top: none;">: <?php echo $p->Nama; ?></td>
+                                        <td style="border-top: none;"><b>Asuransi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>&nbsp;&nbsp;&nbsp;&nbsp;:
+                                            <?php echo $p->Nama_Asuransi; ?>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="border-top: none;">Jenis Kelamin</th>
+                                        <td style="border-top: none;">:&nbsp;<?php echo $p->Kelamin; ?></td>
+                                        <td style="border-top: none;"><b>Alamat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>&nbsp;&nbsp;&nbsp;&nbsp;:
+                                            <?php echo $p->alamat; ?>, rt/rw <?php echo $p->RT; ?>/<?php echo $p->RW; ?>, Kel.<?php echo $p->Nama_Kelurahan; ?>, Kec.<?php echo $p->Nama_Kecamatan; ?> - <?php echo $p->kota; ?>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="border-top: none;">Tanggal Lahir</th>
+                                        <td style="border-top: none;">:&nbsp;<?php echo date("d-m-Y",strtotime($p->Tgl_lahir)); ?></td>
+                                        <td style="border-top: none;"><b>No.Telp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>&nbsp;&nbsp;&nbsp;&nbsp;:
+                                            <?php echo $p->telepon; ?>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            <?php endforeach; ?>
+                    <table class="table table-bordered table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Periksa</th>
+                            <th>Pengambilan</th>
+                            <th>No.Reglab</th>
+                            <th>Spesimen</th>
+                            <th>Layanan</th>
+                            <th>Hasil</th>
+                            <th>Nilai</th>
+                        </tr>
+                        <?php foreach($datpasien as $value): ?>
+                        <?php
+                            $a = Pemeriksaan::select('*')->where('NoRegLab', '=', $value->NoRegLab)->get();
+                            $rujukan = DB::table('v_rujukandetail')->where('NoRegLab', '=', $value->NoRegLab)->first();
+                        ?>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><?php echo date("d-m-Y",strtotime($value->tgl_reg)); ?></td>
+                            <td></td>
+                            <td><?php echo $value->NoRegLab; ?></td>
+                            <td><?php if(($rujukan == null)): ?>
+                                            Non-Rujukan
+                                        <?php else: ?>
+                                            Rujukan ke <?php echo $rujukan->NmLab; ?>
+
+                                        <?php endif; ?>
+                            </td>
+
+                            <td hidden><?php echo $nos=1; ?></td>
+                            <td>
+                            <?php foreach($a as $hasil): ?>
+                            <?php echo $nos++; ?>.&nbsp;<?php echo $hasil->NamaJnsKategori; ?><br>
+                            <?php endforeach; ?>
+                            </td>
+                            <td><?php foreach($a as $hasil): ?><?php echo $hasil->HasilPeriksa; ?><br><?php endforeach; ?></td>
+                            <td><?php foreach($a as $hasil): ?><?php echo $hasil->NilaiRujukan; ?><br><?php endforeach; ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--End of Panel body dan table-->
+           
+    </div>
+    <button class="btn btn-default btn noPrint" onclick="window.print()">
+            <span class="glyphicon glyphicon-print" aria-hidden="true"></span> Cetak</button>
+        </div><!--end oftable-->
+        <div class="col-lg-12">
+            <table class="table table-nospasi">
+                <tr>
+                    <td width="350px" style="border-top: none;"></td>
+                    <td style="border-top: none;" align="center">Mengetahui,<br>Petugas Laboratorium<br><br><br><br>___________________</td>
+                </tr>
+            </table>
+        </div>
+         
+            <?php else: ?>
+            <div class="alert alert-danger" role="alert">
+                <strong>Peringatan !</strong> Tidak ada data riwayat pemeriksaan pasien!
+            </div>
+        <?php endif; ?>
+</div>
+
+        
+	
+    <!-- /#wrapper -->
+    <!-- jQuery -->
+	<?php echo HTML::script('assets/bower_components/jquery/dist/jquery.min.js'); ?>
+
+    <!--<?php echo HTML::script('assets/assets/dist/js/bootstrap-datepicker.js'); ?>-->
+    <!-- Bootstrap Core JavaScript -->
+	<?php echo HTML::script('assets/bower_components/bootstrap/dist/js/bootstrap.min.js'); ?>
+
+    <!-- Metis Menu Plugin JavaScript -->
+	<?php echo HTML::script('assets/bower_components/metisMenu/dist/metisMenu.min.js'); ?>
+
+    <!-- Custom Theme JavaScript -->
+	<?php echo HTML::script('assets/dist/js/sb-admin-2.js'); ?>
+
+	<!--Datetime-->
+	<script type="text/javascript" src="/assets/dtbootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="/assets/dtbootstrap/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="/assets/dtbootstrap/dt.js" charset="UTF-8"></script>
+	<!--chart-->
+	<script src="/assets/hightchart/highcharts.js"></script>
+	<script src="/assets/hightchart/modules/exporting.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<?php $__env->startSection('content'); ?>
+
+    <div clbass="row">
+        <br>
+        <div>
+            <h1> Pendaftaran Pasien Laboratorium </h1>
+        </div>
+        <hr>
+
+        <div class="alert alert-success">
+            <strong>Masukkan No Medrec atau Nama Pasien</strong>
+            <div class="form-group">
+            <?php echo Form::open(array('route'=>'indexregistrasi')); ?>
+
+                <?php echo Form::text('nomedrec', null, array('class'=>'form-control', 'placeholder'=>'No Medrec/Nama', 'style'=>'width:250px; display:inline')); ?>
+
+                
+                <?php echo Form::submit('Cari', array('class'=>'btn btn-primary')); ?>
+
+            <?php echo Form::close(); ?>
+
+            </div>
+        </div>
+    </div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

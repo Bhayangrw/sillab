@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<?php $__env->startSection('content'); ?>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="page-header" align="center"><b>Invoice Hasil Pemeriksaan Laboratorium</b><p>
+					<?php echo e(isset(Auth::user()->name) ? Auth::user()->lab->NmLab : Auth::user()->email); ?><br>
+					<small><?php echo e(isset(Auth::user()->name) ? Auth::user()->lab->Alamat : Auth::user()->email); ?></small></h3>
+                </div>
+            <div class="panel-body">
+            <div class="row">
+						<div class="table-responsive">
+								<div class="col-lg-12">
+								<table class="table table-nospasi">
+									<tr>
+										<th width="130px" style="border-top: none;">Nama Pasien</th>
+										<td style="border-top: none;">: &nbsp; <?php echo $pasien->Nama; ?> (<?php echo $pasien->id_pasien; ?>)</td>
+										<td style="border-top: none;" align="right"><b>
+										<?php if(($rujukan == null)): ?>
+											Pasien Puskesmas
+										<?php else: ?> 
+											Pasien Rujukan
+										<?php endif; ?>
+										</b></td>
+									</tr>
+									<tr>
+										<th style="border-top: none;">Jenis Kelamin</th>
+										<td style="border-top: none;">: &nbsp;
+											<?php echo $pasien->Kelamin; ?>
+
+										</td>
+										<td style="border-top: none;" align="right">
+										<?php if(($rujukan == null)): ?>
+											<b>Laboratorium Puskesmas</b>
+										<?php else: ?>
+											<b>Laboratorium <?php echo $rujukan->NmLab; ?></b>
+										<?php endif; ?>
+										</td>
+									</tr>
+									<tr>
+										<th style="border-top: none;">Tanggal Periksa</th>
+										<td style="border-top: none;">: &nbsp;  <?php echo date("d F Y",strtotime($pasien->tgl_reg)); ?></td>
+									</tr>
+								</table>
+								</div>
+								<div class="col-lg-12">
+								<table class="table table-bordered table-condensed">
+									<tr>
+										<th>No</th>
+										<th>Jenis Pemeriksaan</th>
+										<th>Satuan</th>
+										<th>Nilai Normal</th>
+										<th>Harga</th>
+										<th hidden><?php echo $no=1; ?></th>
+									</tr>
+								<?php foreach($pemeriksaan as $value): ?>
+										<tr>
+											<td><?php echo $no++; ?>.</td>
+											<td><?php echo $value->NamaJnsKategori; ?></td>
+											<td><?php echo $value->NmSatuan; ?></td>
+											<td><?php echo $value->NilaiRujukan; ?></td>
+											<td align="right"><?php echo $value->Harga; ?></td>
+										</tr>
+								<?php endforeach; ?>
+										<tr>
+											<td colspan="4" align="right"><b>Total Bayar </b></td>
+											<td colspan="1" align="right"><b>Rp. <?php echo $hargatotal; ?></b></td>
+										</tr>
+								</table>
+								<table>
+									<tr>
+										<td>
+											<button class="btn btn-default btn noPrint" onclick="window.print()">
+											<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Cetak</button>
+										</td>
+									</tr>
+								</table>
+					
+
+							</div><!--end of table-->
+	
+					<div class="col-lg-12">
+						<table class="table table-nospasi">
+							<tr>
+							<td width="350px" style="border-top: none;"></td>
+								<td style="border-top: none;" align="center">Mengetahui,<br>Petugas Laboratorium<br><br><br><br>___________________</td>
+							</tr>
+						</table>
+					</div>
+					
+					</div>
+					</div>
+					
+                    </div>
+                <!-- /.col-lg-12 -->
+            </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

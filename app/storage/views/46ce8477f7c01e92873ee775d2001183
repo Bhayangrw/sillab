@@ -1,0 +1,61 @@
+<?php $__env->startSection('content'); ?>
+<div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Pemeriksaan<small> :: Tambah Data</small></h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-6">
+						<!-- Alert sukses -->
+						<?php if(Session::has('register_success')): ?>
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<?php echo Session::get('register_success'); ?>
+
+                            </div>
+						<?php endif; ?> 
+						<!-- alert Sukses end -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Form tambah data
+                        </div>
+            
+                        
+                        <div class="panel-body">
+                            <div class="row">
+                                <form role="form" action="<?php echo action('PemeriksaanController@store2'); ?>" method="post">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <?php echo Form::hidden('noreglab', $noreglab->NoRegLab); ?>
+
+                                            <label>Jenis Kategori</label>
+                                            <select class="form-control" id="kdtarif" name="kdtarif">
+                                                <?php foreach($tarif as $value): ?>
+                                                    <option value="<?php echo $value->KdTarif; ?>">
+                                                        <?php echo $value->jnskategori->NamaJnsKategori; ?>
+
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                            <button type="submit" value="add" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Simpan</button>
+                                            <a type="button" class="btn btn-default" href="<?php echo action('RegistrasiController@index2', $noreglab->NoRegLab); ?>">
+                                            <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>  Batal</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<?php $__env->startSection('content'); ?>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="page-header" align="center"><b>Daftar Tarif Layanan Laboratorium</b><p>
+					<?php echo e(isset(Auth::user()->name) ? Auth::user()->lab->NmLab : Auth::user()->email); ?><br>
+					<small><?php echo e(isset(Auth::user()->name) ? Auth::user()->lab->Alamat : Auth::user()->email); ?></small></h3>
+
+                </div>
+            <div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-bordered table-condensed">
+						<thead>
+						<tr align="center" >
+							<td width="30px"><b>No</b></td>
+							<td><b>Jenis Layanan</b></td>
+							<td width="100px"><b>Harga</b></td>
+						</tr>
+						</thead>
+						<tbody>
+						<?php $no=1;  ?>
+						<?php foreach($detarif as $value): ?>
+						
+						<?php
+							$sub = DB::table('v_pemeriksaandetail')
+									->where('KdLab', '=', $kodelab)
+									->where('KdKategori', '=', $value->KdKategori)
+									->groupBy('KdSubKategori')
+									->get();
+						?>
+
+						<tr>
+							<td><?php echo $no++; ?>.</td>
+							<td>
+								<u><b>Kategori : <?php echo $value->NamaKategori; ?><b></u>
+							<td></td>
+							<!--looping sub-kategori --><?php foreach($sub as $subkategori): ?>
+							<tr>
+								<td></td><td><b>Sub Kategori : <?php echo $subkategori->NmSubKategori; ?><b></td>
+								<td></td>
+							</tr>
+							<?php
+							$jns = DB::table('v_pemeriksaandetail')
+									->where('KdLab', '=', $kodelab)
+									->where('KdSubKategori', '=', $subkategori->KdSubKategori)
+									->where('KdKategori', '=', $value->KdKategori)
+									->groupBy('KdJnsKategori')
+									->get();
+
+							?>
+							<!--looping jenis-kategori --><?php foreach($jns as $jnskategori): ?>
+							<?php
+
+							$hrg = DB::table('v_pemeriksaandetail')
+									->where('KdLab', '=', $kodelab)
+									->where('KdJnsKategori', '=', $jnskategori->KdJnsKategori)
+									->groupBy('KdJnsKategori')
+									->get();
+
+							?>
+
+							<tr>
+								<td></td>
+								<td> <?php echo $jnskategori->NamaJnsKategori; ?></td>
+								<td align="right"><?php foreach($hrg as $harga): ?> <?php echo $harga->Harga; ?> <?php endforeach; ?></td>
+							</tr>
+							<!--Looping jenis-kategori --><?php endforeach; ?>
+							<!--Looping sub-kategori --><?php endforeach; ?>
+							</td>
+						</tr>
+						<?php endforeach; ?>
+						</tbody>
+					</table>
+		</div><!--end of table-->
+						
+					<button class="btn btn-default btn noPrint" onclick="window.print()">
+					<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Cetak</button>	
+					<div class="col-lg-12">
+						<table class="table table-nospasi">
+							<tr>
+							<td width="350px" style="border-top: none;"></td>
+								<td style="border-top: none;" align="center">Mengetahui,<br>Petugas Laboratorium<br><br><br><br>___________________</td>
+							</tr>
+						</table>
+					</div>
+					</div>
+                    </div>
+                <!-- /.col-lg-12 -->
+            </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

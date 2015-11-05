@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<?php $__env->startSection('content'); ?>
+
+    <div class="row">
+        <br>
+        <div>
+            <h1> Data Hasil Pemeriksaan </h1>
+        </div>
+        <hr>
+        <div class="alert alert-success">
+            <strong>Masukkan No Registrasi & Nama Pasien</strong>
+            <div class="form-group">
+            <?php echo Form::open(array('route'=>'indexhasilpemeriksaan')); ?>
+
+                <?php echo Form::text('noreglab', null, array('class'=>'form-control', 'placeholder'=>'No Registrasi/Nama Pasien', 'style'=>'width:250px; display:inline')); ?>
+
+                
+                <?php echo Form::submit('Cari', array('class'=>'btn btn-primary')); ?>
+
+            <?php echo Form::close(); ?>
+
+            <i>Prioritas Pencarian Awal: No Registrasi</i>
+            </div>
+        </div>
+        <div>
+            
+        </div>
+    </div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

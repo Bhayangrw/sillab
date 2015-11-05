@@ -1,0 +1,138 @@
+<?php $__env->startSection('content'); ?>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Billing Laboratorium</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				 Tabel Data Billing Laboratorium
+			</div>
+			<!--Panel body dan table-->
+			<div class="panel-body">
+			<table>
+			<tr>
+				<td>
+				<p>Tanggal Pemeriksaan</p>
+				</td>
+				<td></td>
+				<td></td>
+				<td>
+				<p>Pencarian</p>
+				</td>
+			</tr>
+			<tr>
+			<td>
+			<form role="form" action="<?php echo action('BillingController@filter'); ?>">
+				<div class="form-group">
+						<div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dt1" data-link-format="yyyy-mm-dd">
+							<input class="form-control" type="text" value="" readonly>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+					<input type="hidden" id="dt1" name="tglperiksa" value=""/>
+				</div>
+			</td>
+			<td>
+				<div class="form-group">
+				<button type="submit" class="btn btn-default">Filter</button>
+				</div>
+			</td>
+			</form>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td>
+			<form role="form" action="<?php echo action('BillingController@filterReglab'); ?>">
+				<div class="form-group">
+					<input class="form-control" id="noreglab" name="noreglab" value="" placeholder="Noreglab/Nama" required>
+				</div>
+			</td>
+			<td>
+				<div class="form-group">
+				<button type="submit" class="btn btn-default">Cari</button>
+				</div>
+			</td>
+			</form>
+			</td>
+			</tr>
+			</table>
+			<p>
+				<div class="table-responsive">
+					<?php if(count($bils)): ?>
+					<table class="table table-bordered table-hover table-condensed">
+						<thead>
+						<tr>
+							<th width="30px">No</th>
+							<th>Tanggal Periksa</th>
+							<th>NoRegLab</th>
+							<th>Nama Pasien</th>
+							<th>Harga Total</th>
+							<th>Status Spesimen</th>
+							<th>Status Pembayaran</th>
+							<th width="145px" align="center">
+								<div align="center">Aksi</div>
+							</th>
+						</tr><td hidden><?php echo $no=1; ?></td>
+						<?php foreach($bils as $value): ?>
+						<?php
+							$a = DB::table('billing')->where('NoReglab', '=', $value->NoReglab)->get();
+							$rujukan = DB::table('v_rujukan')->where('NoReglab', '=', $value->NoReglab)->first();
+						?>
+						</thead>
+						<tbody>
+						<tr>
+							<td><?php echo $no; ?></td>
+							<td><?php echo date("d F, Y",strtotime($value->tgl_reg)); ?></td>
+							<td><?php echo $value->NoReglab; ?></td>
+							<td><?php echo $value->Nama; ?></td>
+							<td><?php echo $value->total; ?></td>
+							<td><?php if(($rujukan == null)): ?>
+											Non-Rujukan
+										<?php else: ?>
+											Rujukan
+										<?php endif; ?>
+							</td>
+							<td>
+							<?php foreach($a as $v): ?>
+								<?php if(($v->StatusPembayaran) == 0 ): ?>
+									Belum Lunas
+								<?php else: ?> 
+									Lunas	
+								<?php endif; ?>
+									</td>
+									<td align="center">
+								<?php if(($v->StatusPembayaran) == 0 ): ?>
+									<a type="submit" class="btn btn-default btn-xs" href="<?php echo action('BillingController@status2', array($value->NoReglab, 1 )); ?>"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Cek</a>
+								<?php else: ?>
+									<a type="submit" class="btn btn-default btn-xs" href="" disabled><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>Cek</a>
+								<?php endif; ?>
+									<a class="btn btn-default btn-xs" href="<?php echo action('BillingController@detail', $value->NoReglab); ?>">
+									<span class="glyphicon glyphicon-book" aria-hidden="true"></span> Detail</a>
+							<?php endforeach; ?>
+							</td>
+						</tr>
+						<?php $no++; ?>
+						<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+					<span style="float: left;">
+						<?php echo '(Hasil  '. $bils->getFrom() .'-'. $bils->getTo() .')  <b>jumlah data :</b> '. $bils->getTotal(); ?>
+
+					</span>
+			</div>
+			<!--End of Panel body dan table-->
+			<?php else: ?>
+			<div class="alert alert-danger" role="alert">
+				<strong>Peringatan !</strong> Tidak ada pencarian data.
+			</div>
+		<?php endif; ?>
+	</div>
+	<?php echo $bils->appends(Request::except('page'))->links(); ?>
+
+</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

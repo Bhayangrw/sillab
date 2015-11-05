@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<?php $__env->startSection('content'); ?>
+
+    <div class="row">
+        <br>
+        <div>
+            <h1> Pendaftaran Pasien Laboratorium </h1>
+        </div>
+        <hr>
+        <div class="alert alert-success">
+            <strong>Masukkan No Medrec atau Nama Pasien</strong>
+            <div class="form-group">
+            <?php echo Form::open(array('route'=>'indexregistrasi')); ?>
+
+                <?php echo Form::text('nomedrec', null, array('class'=>'form-control', 'placeholder'=>'No Medrec/Nama', 'style'=>'width:250px; display:inline')); ?>
+
+                
+                <?php echo Form::submit('Cari', array('class'=>'btn btn-primary')); ?>
+
+            <?php echo Form::close(); ?>
+
+            </div>
+        </div>
+
+    <?php if(count($pasien)): ?>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th width="30px">No</th>
+                        <th>No Medrec</th>
+                        <th>Nama Pasien</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tgl Lahir</th>
+                        <th>Alamat</th>
+                        <th>Action</th>
+                    </tr>
+                <?php $no = $pasiennama->getFrom(); ?>
+                <?php foreach($pasien as $key): ?>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo $no; ?></td>
+                        <td><strong><?php echo $key->id_pasien; ?></strong></td>
+                        <td><?php echo $key->nama; ?></td>
+                        <td><?php echo $key->kelamin; ?></td>
+                        <td><?php echo $key->tgl_lahir; ?></td>
+                        <td><?php echo $key->kepalaKeluarga->alamat.' RT.'.$key->kepalaKeluarga->RT.' RW.'.$key->kepalaKeluarga->RW.' Kelurahan '.$key->kepalaKeluarga->kelurahan->nama_kelurahan.' Kecamatan '.$key->kepalaKeluarga->kelurahan->nama_kecamatan.' '.$key->kepalaKeluarga->kota; ?></td>
+                        <td align="center">
+
+                        <a class="btn btn-default btn-xs" href="<?php echo action('RegistrasiController@lihat', $key->id_pasien); ?>"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> lihat</a></td>
+
+                    </tr>
+                <?php $no++; ?>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+    <?php elseif(count($pasiennama)): ?>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th width="30px">No</th>
+                            <th>No Medrec</th>
+                            <th>Nama Pasien</th>
+                            <th>Tgl Lahir</th>
+                            <th>Alamat</th>
+                            <th>Action</th>
+                        </tr>
+                    <?php $no = $pasiennama->getFrom(); ?>
+                    <?php foreach($pasiennama as $key): ?>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><?php echo $no; ?></td>
+                            <td><?php echo $key->id_pasien; ?></td>
+                            <td><strong><?php echo $key->nama; ?></strong></td>
+                            <td><?php echo $key->tgl_lahir; ?></td>
+                            <td><?php echo $key->kepalaKeluarga->alamat.' RT.'.$key->kepalaKeluarga->RT.' RW.'.$key->kepalaKeluarga->RW.' Kelurahan '.$key->kepalaKeluarga->kelurahan->nama_kelurahan.' Kecamatan '.$key->kepalaKeluarga->kelurahan->nama_kecamatan.' '.$key->kepalaKeluarga->kota; ?></td>
+                            <td align="center">
+
+                            <a class="btn btn-default btn-xs" href="<?php echo action('RegistrasiController@lihat', $key->id_pasien); ?>"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> lihat</a></td>
+
+                        </tr>
+                    <?php $no++; ?>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+    <?php else: ?>
+
+        <div class="alert alert-danger">
+            <strong>Data Yang Anda Cari Tidak Terdaftar</strong>
+        </div>
+        
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

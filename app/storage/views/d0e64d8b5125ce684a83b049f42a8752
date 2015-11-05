@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<?php $__env->startSection('content'); ?>
+
+    <div class="row">
+        <br>
+        <div>
+            <h1> Pendaftaran Pasien Laboratorium </h1>
+        </div>
+        <hr>
+        <div class="alert alert-success">
+            <strong>Masukkan No Medrec atau Nama Pasien</strong>
+            <div class="form-group">
+            <?php echo Form::open(array('route'=>'indexregistrasi')); ?>
+
+                <?php echo Form::text('nomedrec', null, array('class'=>'form-control', 'placeholder'=>'No Medrec/Nama', 'style'=>'width:250px; display:inline')); ?>
+
+                
+                <?php echo Form::submit('Cari', array('class'=>'btn btn-primary')); ?>
+
+            <?php echo Form::close(); ?>
+
+            </div>
+        </div>
+    <?php if(count($pasien)): ?>
+        <?php echo Form::open(array('route'=>'postregistrasi')); ?>
+
+            <div>
+                <?php echo Form::hidden('id_pegawai', $pegawai->IdPegawai); ?>
+
+            </div>
+            <div>
+                <?php foreach($pasien as $key): ?>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-condensed">
+                                <tr width="100%">
+                                    <th width="20%">Nomor Medrec</th><td width="80%"><?php echo $key->id_pasien; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Nama Pasien</th><td><?php echo $key->nama; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Tgl Lahir</th><td><?php echo date("d F Y",strtotime($key->tgl_lahir)); ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Alamat</th><td><?php echo $key->Alamat; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Jenis Kelamin</th><td><?php echo $key->kelamin; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Sasaran</th>
+                                    	<td>	
+											<select class="form-control" id="sasaran" name="sasaran">
+												<option value="Pasien Umum">Pasien Umum</option>
+												<option value="Ibu Hamil">Ibu Hamil</option>
+												<option value="Anak Sekolah">Anak Sekolah</option>
+											</select>
+                                    	</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                    <?php echo Form::hidden('no_medrec', $key->id_pasien); ?>
+
+                    <?php echo Form::hidden('tgl_reg',date("Y-m-d")); ?>
+
+                    </div><br>
+                <?php endforeach; ?>
+            <?php echo Form::submit('DAFTAR', array('class'=>'btn btn-primary')); ?>
+
+            </div>
+        <?php echo Form::close(); ?>
+
+    <?php else: ?>
+        <div class="alert alert-danger">
+            <strong>No Medrec Yang Anda Cari Tidak Terdaftar</strong>
+        </div>
+    <?php endif; ?>
+        <div>
+        
+        </div>
+    </div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

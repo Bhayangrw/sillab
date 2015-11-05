@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<?php $__env->startSection('content'); ?>
+
+<div class="row">
+    <br>
+    <div>
+        <h1> Data Hasil Pemeriksaan </h1>
+    </div>
+    <hr>
+    <div class="alert alert-success">
+        <strong>Masukkan No Registrasi & Nama Pasien</strong>
+        <div class="form-group">
+        <?php echo Form::open(array('route'=>'indexhasilpemeriksaan')); ?>
+
+            <?php echo Form::text('noreglab', null, array('class'=>'form-control', 'placeholder'=>'No Registrasi/Nama Pasien', 'style'=>'width:250px; display:inline')); ?>
+
+            
+            <?php echo Form::submit('Cari', array('class'=>'btn btn-primary')); ?>
+
+        <?php echo Form::close(); ?>
+
+        <i>Prioritas Pencarian Awal: No Registrasi</i>
+        </div>
+
+    </div>
+    
+    <?php if(count($reglab)): ?>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th width="30px">No</th>
+                        <th>No. Medrec</th>
+                        <th>No. Registrasi</th>
+                        <th>Nama Pasien</th>
+                        <th>Tgl Lahir</th>
+                        <th>Tgl Pemeriksaan</th>
+                        <th>Action</th>
+                    </tr>
+                <?php $no = $reglab->getFrom(); ?>
+                <?php foreach($reglab as $key): ?>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo $no; ?></td>
+                        <td><?php echo $key->pasien->id_pasien; ?></td>
+                        <td><strong><?php echo $key->NoRegLab; ?></strong></td>
+                        <td><?php echo $key->pasien->nama; ?></td>
+                        <td><?php echo $key->pasien->tgl_lahir; ?></td>
+                        <td><?php echo $key->tgl_reg; ?></td>
+                        <td align="center">
+
+                        <a class="btn btn-default btn-xs" href="<?php echo action('HasilPemeriksaanController@lihat', $key->NoRegLab); ?>"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> lihat</a>
+
+                    </tr>
+                <?php $no++; ?>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+    <?php elseif(count($regnama)): ?>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th width="30px">No</th>
+                        <th>No. Medrec</th>
+                        <th>Nama Pasien</th>
+                        <th>Tgl Lahir</th>
+                        <th>Action</th>
+                    </tr>
+                <?php $no = $regnama->getFrom(); ?>
+                <?php foreach($regnama as $key): ?>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo $no; ?></td>
+                        <td><?php echo $key->id_pasien; ?></td>
+                        <td><strong><?php echo $key->nama; ?></strong></td>
+                        <td><?php echo $key->tgl_lahir; ?></td>
+                        <td align="center">
+
+                        <a class="btn btn-default btn-xs" href="<?php echo action('HasilPemeriksaanController@lihatnama', $key->id_pasien); ?>"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> lihat</a>
+
+                    </tr>
+                <?php $no++; ?>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+    <?php else: ?>
+        
+        <div class="alert alert-danger">
+            <strong>Data Yang Anda Cari Tidak Terdaftar</strong>
+        </div>
+
+    <?php endif; ?>
+
+</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

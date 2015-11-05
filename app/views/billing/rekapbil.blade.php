@@ -1,0 +1,74 @@
+@extends('layouts.master')
+@section('content')
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Rekap Transaksi Billing</h1>
+    </div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				 Filter berdasarkan Tanggal Pemeriksaan
+			</div>
+			<!--Panel body dan table-->
+			<div class="panel-body">
+			<form role="form" action="{{URL::to('billings/rekapbildetail')}}">
+			<p>
+			<table>
+			<tr>
+				<td colspan="3">Lihat Rekap Spesimen : 
+					<div class="btn-group">
+					<select class="form-control" id="spesimen" name="spesimen">
+						<option value="0">--Pilih--</option>
+						<option value="1">Rujukan</option>
+						<option value="2">Non-Rujukan</option>
+						<option value="3">Rekap Semua</option>
+					</select>
+					</div>
+				<p>
+				</td>
+			</tr>
+			<tr>
+			<td>
+				<div class="form-group">
+						<div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dt1" data-link-format="yyyy-mm-dd">
+							<input class="form-control" type="text" value="" readonly placeholder="Dari tanggal">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+					<input type="hidden" id="dt1" name="tgl1" value=""/>
+				</div>
+			</td>
+			<td>&nbsp;</td>
+			<td>
+				<div class="form-group">
+						<div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dt2" data-link-format="yyyy-mm-dd">
+							<input class="form-control" type="text" value="" readonly placeholder="Sampai tanggal">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+					<input type="hidden" id="dt2" name="tgl2" value=""/>
+				</div>
+			</td>
+			<td>&nbsp;</td>
+			<td>
+				<div class="form-group">
+				<button type="submit" class="btn btn-default">Cari</button>
+				</div>
+			</td>
+			</tr>
+			</table>
+			</form>
+				<div class="alert alert-danger" role="alert">
+					<strong>Peringatan!</strong> Tidak ada data yang ditampilkan.
+				</div>
+			</div><!--End of Panel body dan table-->
+	</div>
+	
+	</div>
+</div>
+</div>
+
+@stop
